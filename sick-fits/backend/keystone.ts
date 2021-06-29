@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { config, createSchema } from '@keystone-next/keystone/schema';
+import { User } from './schemas/User';
 
 // eslint-disable-next-line prettier/prettier
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/keystone-store-tutorial';
@@ -23,6 +24,7 @@ export default config({
   },
   lists: createSchema({
     // schema items here
+    User,
   }),
   ui: {
     // TODO change for roles
