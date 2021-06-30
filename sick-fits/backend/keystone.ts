@@ -6,6 +6,7 @@ import { withItemData, statelessSessions } from '@keystone-next/keystone/session
 import { User } from './schemas/User';
 import { Product } from './schemas/Product';
 import { ProductImage } from './schemas/ProductImage';
+import { insertSeedData } from './seed-data';
 
 // eslint-disable-next-line prettier/prettier
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/keystone-store-tutorial';
@@ -36,7 +37,11 @@ export default withAuth(
     db: {
       adapter: 'mongoose',
       url: databaseURL,
-      // add dataseeding
+      async onConnect(keystone) {
+        console.log('Connected to Database');
+        // eslint-disable-next-line prettier/prettier
+        if (process.argv.includes('--seed-data')) await insertSeedData(keystone);
+      },
     },
     lists: createSchema({
       // schema items here
