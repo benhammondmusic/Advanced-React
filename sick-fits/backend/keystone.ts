@@ -4,6 +4,7 @@ import { createAuth } from '@keystone-next/auth';
 // eslint-disable-next-line prettier/prettier
 import { withItemData, statelessSessions } from '@keystone-next/keystone/session';
 import { User } from './schemas/User';
+import { Product } from './schemas/Product';
 
 // eslint-disable-next-line prettier/prettier
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/keystone-store-tutorial';
@@ -39,6 +40,7 @@ export default withAuth(
     lists: createSchema({
       // schema items here
       User,
+      Product,
     }),
     ui: {
       // show UI only to users who pass test
