@@ -1,5 +1,8 @@
 import 'dotenv/config';
 import { config, createSchema } from '@keystone-next/keystone/schema';
+import { createAuth } from '@keystone-next/auth';
+// eslint-disable-next-line prettier/prettier
+import { withItemData, statelessSessions } from '@keystone-next/keystone/session';
 import { User } from './schemas/User';
 
 // eslint-disable-next-line prettier/prettier
@@ -10,25 +13,41 @@ const sessionConfig = {
   secret: process.env.COOKIE_SECRET,
 };
 
-export default config({
-  server: {
-    cors: {
-      origin: [process.env.FRONTEND_URL],
-      credentials: true,
-    },
+const { withAuth } = createAuth({
+  listKey: 'User',
+  identityField: 'email',
+  secretField: 'password',
+  initFirstItem: {
+    fields: ['name', 'email', 'password'],
+    // TODO add roles
   },
-  db: {
-    adapter: 'mongoose',
-    url: databaseURL,
-    // add dataseeding
-  },
-  lists: createSchema({
-    // schema items here
-    User,
-  }),
-  ui: {
-    // TODO change for roles
-    isAccessAllowed: () => true,
-  },
-  // TODO add session values
 });
+
+export default withAuth(
+  config({
+    server: {
+      cors: {
+        origin: [process.env.FRONTEND_URL],
+        credentials: true,
+      },
+    },
+    db: {
+      adapter: 'mongoose',
+      url: databaseURL,
+      // add dataseeding
+    },
+    lists: createSchema({
+      // schema items here
+      User,
+    }),
+    ui: {
+      // show UI only to users who pass test
+      // have session, are logged in
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      isAccessAllowed: ({ session }) => !!session?.data,
+    },
+    session: withItemData(statelessSessions(sessionConfig), {
+      User: 'id',
+    }),
+  })
+);
