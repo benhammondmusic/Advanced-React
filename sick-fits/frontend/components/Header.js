@@ -7,9 +7,8 @@ const Logo = styled.h1`
   margin-left: 2rem;
   position: relative;
   z-index: 2;
-  transform: skew(-7deg);
-
   background: red;
+  transform: skew(-7deg);
   a {
     color: white;
     text-decoration: none;
@@ -24,12 +23,12 @@ const HeaderStyles = styled.header`
     display: grid;
     grid-template-columns: auto 1fr;
     justify-content: space-between;
-    align-items: center;
+    align-items: stretch;
   }
 
   .sub-bar {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr auto;
     border-bottom: 1px solid var(--black, black);
   }
 `;
@@ -41,11 +40,11 @@ export default function Header() {
         <Logo>
           <Link href="/">Store</Link>
         </Logo>
+        <Nav />
       </div>
       <div className="sub-bar">
         <p>Search</p>
       </div>
-      <Nav />
     </HeaderStyles>
   );
 }
