@@ -26,8 +26,9 @@ const { withAuth } = createAuth({
   },
 
   passwordResetLink: {
+    // eslint-disable-next-line @typescript-eslint/require-await
     async sendToken(args) {
-      console.log({ args });
+      console.log('*****', args);
     },
   },
 });
